@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { z } from 'zod';
 import * as clientes from '../services/clientes.js';
-
+import { exigirRol } from '../middleware/auth.js';
 const router = Router();
 
 const clienteSchema = z.object({
@@ -45,7 +45,7 @@ router.get('/:id', async (req, res) => {
   res.json(cliente);
 });
 
-router.post('/', async (req, res) => {
+router.post('/', exigirRol('admin'), async (req, res) => {
   const datos = validar(req, res);
   if (!datos) return;
 
